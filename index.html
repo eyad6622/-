@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الأرقام</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+        }
+        h1 {
+            color: #2cbcaf;
+            font-size: 36px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+        }
+        button {
+            padding: 10px;
+            margin: 10px;
+            width: 100px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+        }
+        .total {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>صندوق استثمارات رائد</h1>
+    <input type="number" id="numberInput" placeholder="أدخل رقمًا">
+    <button onclick="addNumber()">إضافة</button>
+    <button onclick="deleteSelected()">حذف</button>
+    
+    <h2>سجل الأرقام</h2>
+    <ul id="numberList"></ul>
+
+    <div class="total">المجموع: <span id="totalSum">0</span></div>
+
+    <script>
+        let numbers = [];
+
+        function addNumber() {
+            const numberInput = document.getElementById("numberInput");
+            const number = parseFloat(numberInput.value);
+
+            if (!isNaN(number)) {
+                numbers.push(number);
+                updateNumberList();
+                numberInput.value = '';
+            }
+        }
+
+        function deleteSelected() {
+            const selectedNumber = document.querySelector('li.selected');
+            if (selectedNumber) {
+                const numberToDelete = parseFloat(selectedNumber.textContent);
+                numbers = numbers.filter(n => n !== numberToDelete);
+                updateNumberList();
+            }
+        }
+
+        function updateNumberList() {
+            const numberList = document.getElementById("numberList");
+            const totalSumElement = document.getElementById("totalSum");
+            numberList.innerHTML = '';
+
+            numbers.forEach(number => {
+                const listItem = document.createElement("li");
+                listItem.textContent = number;
+                listItem.onclick = function() {
+                    document.querySelectorAll('li').forEach(item => item.classList.remove('selected'));
+                    listItem.classList.add('selected');
+                };
+                numberList.appendChild(listItem);
+            });
+
+            const totalSum = numbers.reduce((sum, num) => sum + num, 0);
+            totalSumElement.textContent = totalSum;
+        }
+    </script>
+</body>
+</html>
